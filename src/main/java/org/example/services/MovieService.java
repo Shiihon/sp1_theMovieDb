@@ -40,10 +40,10 @@ public class MovieService {
 
             if (response.statusCode() == 200) {
                 JsonNode json = objectMapper.readTree(response.body());
-                CastMemberDTO[] castmembers = objectMapper.treeToValue(json.get("cast"), CastMemberDTO[].class);
+                CastMemberDTO[] castMembers = objectMapper.treeToValue(json.get("cast"), CastMemberDTO[].class);
 
-                if (castmembers.length > 0) {
-                    return Arrays.stream(castmembers).filter(c -> c.getRole().equals("Directing") || c.getRole().equals("Acting")).toList();
+                if (castMembers.length > 0) {
+                    return Arrays.stream(castMembers).filter(c -> c.getRole().equals("Directing") || c.getRole().equals("Acting")).toList();
                 } else {
                     System.out.println("No information for cast members found.");
                 }
