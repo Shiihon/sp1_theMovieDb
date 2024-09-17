@@ -3,6 +3,7 @@ package org.example.services;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.dtos.CastMemberDTO;
 import org.example.dtos.MovieDTO;
 
@@ -12,11 +13,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MovieService {
 
@@ -29,13 +30,13 @@ public class MovieService {
         this.objectMapper = objectMapper;
     }
 
-    public Set<CastMemberDTO> getCastMembersByMovieId(Long id) {
+    public Set<CastMemberDTO> getCastMembersByMovieId(int id) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/movie/" + id + "/credits"))
-                    .header("accept", "Application/json")
+                    .header("Accept", "Application/json")
                     .header("Authorization", "Bearer " + API_KEY)
-                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .GET()
                     .build();
 
             HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
@@ -43,9 +44,12 @@ public class MovieService {
             if (response.statusCode() == 200) {
                 JsonNode json = objectMapper.readTree(response.body());
                 CastMemberDTO[] castMembers = objectMapper.treeToValue(json.get("cast"), CastMemberDTO[].class);
+                CastMemberDTO[] crewMembers = objectMapper.treeToValue(json.get("crew"), CastMemberDTO[].class);
 
-                if (castMembers.length > 0) {
-                    return Arrays.stream(castMembers).filter(c -> c.getRole().equals("Acting") || c.getJob() != null && c.getJob().equals("Director")).collect(Collectors.toSet());
+                Set<CastMemberDTO> castMembersSet = Stream.concat(Stream.of(castMembers), Stream.of(crewMembers)).collect(Collectors.toSet());
+
+                if (!castMembersSet.isEmpty()) {
+                    return castMembersSet.stream().filter(c -> c.getRole().equals("Acting") || c.getJob() != null && c.getJob().equals("Director")).collect(Collectors.toSet());
                 } else {
                     System.out.println("No information for cast members found.");
                 }
@@ -65,7 +69,7 @@ public class MovieService {
             Set<MovieDTO> movies = new HashSet<>();
 
             int currentPage = 1;
-            int totalPages;
+            int totalPages = 0;
 
             do {
                 StringBuilder builder = new StringBuilder(BASE_URL)
@@ -92,7 +96,7 @@ public class MovieService {
                     JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, MovieDTO.class);
                     movies.addAll(objectMapper.treeToValue(json.get("results"), type));
                 } else {
-                    throw new RuntimeException(String.format("Could not get movies from country '%s'.", country));
+                    System.out.println("GET request failed. Status code: " + response.statusCode());
                 }
             } while (currentPage <= totalPages);
 
@@ -131,5 +135,14 @@ public class MovieService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
+        MovieService movieService = new MovieService(objectMapper);
+
+        System.out.println(movieService.getCastMembersByMovieId(120));
     }
 }
