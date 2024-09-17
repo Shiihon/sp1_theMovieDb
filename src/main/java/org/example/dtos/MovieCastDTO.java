@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieCastDTO {
     private Long id;
