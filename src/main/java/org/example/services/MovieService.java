@@ -12,9 +12,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MovieService {
 
@@ -27,7 +29,7 @@ public class MovieService {
         this.objectMapper = objectMapper;
     }
 
-    public List<CastMemberDTO> getCastMembersByMovieId(Long id) {
+    public Set<CastMemberDTO> getCastMembersByMovieId(Long id) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/movie/" + id + "/credits"))
@@ -43,7 +45,7 @@ public class MovieService {
                 CastMemberDTO[] castMembers = objectMapper.treeToValue(json.get("cast"), CastMemberDTO[].class);
 
                 if (castMembers.length > 0) {
-                    return Arrays.stream(castMembers).filter(c -> c.getRole().equals("Directing") || c.getRole().equals("Acting")).toList();
+                    return Arrays.stream(castMembers).filter(c -> c.getRole().equals("Acting") || c.getJob() != null && c.getJob().equals("Director")).collect(Collectors.toSet());
                 } else {
                     System.out.println("No information for cast members found.");
                 }
@@ -57,10 +59,10 @@ public class MovieService {
         return null;
     }
 
-    public List<MovieDTO> getMoviesByCountry(String country) {
+    public Set<MovieDTO> getMoviesByCountry(String country) {
         try {
             HttpClient httpClient = HttpClient.newHttpClient();
-            List<MovieDTO> movies = new ArrayList<>();
+            Set<MovieDTO> movies = new HashSet<>();
 
             int currentPage = 1;
             int totalPages;

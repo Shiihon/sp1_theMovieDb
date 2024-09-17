@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
     private Long id;

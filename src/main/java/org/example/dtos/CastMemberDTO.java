@@ -7,12 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CastMemberDTO {
     private Long id;
     private String name;
     @JsonProperty("known_for_department")
     private String role;
+    private String job;
 }
