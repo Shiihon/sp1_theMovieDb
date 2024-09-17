@@ -3,6 +3,7 @@ package org.example.services;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.dtos.CastMemberDTO;
+import org.example.dtos.MovieDTO;
 
 import java.io.IOException;
 import java.net.URI;
