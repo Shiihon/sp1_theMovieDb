@@ -50,4 +50,34 @@ public class MovieService {
 
         return null;
     }
+
+    public MovieDTO getMovieById(int id) {
+        try {
+            HttpClient httpClient = HttpClient.newHttpClient();
+
+            StringBuilder builder = new StringBuilder("https://api.themoviedb.org/3/movie/")
+                    .append(id)
+                    .append("?api_key=")
+                    .append(System.getenv("api_key"));
+
+            HttpRequest request = HttpRequest
+                    .newBuilder()
+                    .header("Accept", "application/json")
+                    .uri(URI.create(builder.toString()))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return objectMapper.readValue(response.body(), MovieDTO.class);
+            } else {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
