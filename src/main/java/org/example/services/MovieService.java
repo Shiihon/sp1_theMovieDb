@@ -3,6 +3,7 @@ package org.example.services;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.dtos.CastMemberDTO;
 import org.example.dtos.MovieDTO;
 
 import java.io.IOException;
@@ -12,16 +13,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import org.example.dtos.MovieDTO;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 public class MovieService {
 
@@ -32,6 +25,36 @@ public class MovieService {
 
     public MovieService(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
+    }
+
+    public List<CastMemberDTO> getCastMembersByMovieId(Long id) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.themoviedb.org/3/movie/" + id + "/credits"))
+                    .header("accept", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JsonNode json = objectMapper.readTree(response.body());
+                CastMemberDTO[] castMembers = objectMapper.treeToValue(json.get("cast"), CastMemberDTO[].class);
+
+                if (castMembers.length > 0) {
+                    return Arrays.stream(castMembers).filter(c -> c.getRole().equals("Directing") || c.getRole().equals("Acting")).toList();
+                } else {
+                    System.out.println("No information for cast members found.");
+                }
+            } else {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public List<MovieDTO> getMoviesByCountry(String country) {
