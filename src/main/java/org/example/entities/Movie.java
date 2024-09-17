@@ -14,12 +14,16 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@Table(name = "movie")
 public class Movie {
     @Id
     private Long id;
+    @Column(name = "original_title")
     private String originalTitle;
     private String overview;
+    @Column(name = "release_date")
     private LocalDate releaseDate;
+    @Column(name = "vote_average")
     private Double voteAverage;
     @ManyToMany
     private List<Genre> genres;

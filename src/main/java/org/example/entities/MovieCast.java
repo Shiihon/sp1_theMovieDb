@@ -1,9 +1,6 @@
 package org.example.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +13,7 @@ import java.util.List;
 @Builder
 @Data
 @Entity
+@Table(name = "movie_cast")
 public class MovieCast {
     @Id
     private Long id;
