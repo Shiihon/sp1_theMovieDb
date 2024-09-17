@@ -3,7 +3,6 @@ package org.example.services;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.example.dtos.CastMemberDTO;
 import org.example.dtos.MovieDTO;
 
@@ -79,8 +78,8 @@ public class MovieService {
                         .append(country);
 
                 HttpRequest request = HttpRequest.newBuilder()
-                        .header("Authorization", "Bearer " + API_KEY)
                         .header("Accept", "application/json")
+                        .header("Authorization", "Bearer " + API_KEY)
                         .uri(URI.create(builder.toString()))
                         .GET()
                         .build();
@@ -117,8 +116,8 @@ public class MovieService {
 
             HttpRequest request = HttpRequest
                     .newBuilder()
-                    .header("Authorization", "Bearer " + API_KEY)
                     .header("Accept", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
                     .uri(URI.create(builder.toString()))
                     .GET()
                     .build();
@@ -135,14 +134,5 @@ public class MovieService {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
-        MovieService movieService = new MovieService(objectMapper);
-
-        System.out.println(movieService.getCastMembersByMovieId(120));
     }
 }
