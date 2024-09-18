@@ -21,6 +21,7 @@ public class Movie {
     @Column(name = "original_title")
     private String originalTitle;
     private String overview;
+    private Double popularity;
     @Column(name = "release_date")
     private LocalDate releaseDate;
     @Column(name = "vote_average")

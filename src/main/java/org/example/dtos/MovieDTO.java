@@ -18,6 +18,7 @@ public class MovieDTO {
     @JsonProperty("original_title")
     private String originalTitle;
     private String overview;
+    private Double popularity;
     @JsonProperty("release_date")
     private LocalDate releaseDate;
     @JsonProperty("vote_average")
