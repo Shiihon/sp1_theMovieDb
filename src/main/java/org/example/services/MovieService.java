@@ -67,13 +67,20 @@ public class MovieService {
             HttpClient httpClient = HttpClient.newHttpClient();
             Set<MovieDTO> movies = new HashSet<>();
 
+            LocalDate endYear = LocalDate.of(2024, 1, 1);
+            LocalDate startYear = endYear.minusYears(5);
+
             int currentPage = 1;
             int totalPages = 0;
 
             do {
                 StringBuilder builder = new StringBuilder(BASE_URL)
-                        .append("/discover/movie?include_adult=true&include_video=false&language=en-US&page=1&release_date.gte=")
-                        .append(LocalDate.now().minusYears(5))
+                        .append("/discover/movie?include_adult=true&include_video=false&language=en-US&page=")
+                        .append(currentPage)
+                        .append("&release_date.gte=")
+                        .append(startYear)
+                        .append(("&primary_release_date.lte="))
+                        .append(endYear)
                         .append("&sort_by=popularity.desc&with_origin_country=")
                         .append(country);
 
