@@ -5,9 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.entities.Movie;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -24,4 +26,14 @@ public class MovieDTO {
     @JsonProperty("vote_average")
     private Double voteAverage;
     private List<GenreDTO> genres;
+
+    public MovieDTO(Movie movie) {
+        this.id = movie.getId();
+        this.originalTitle = movie.getOriginalTitle();
+        this.overview = movie.getOverview();
+        this.popularity = movie.getPopularity();
+        this.releaseDate = movie.getReleaseDate();
+        this.voteAverage = movie.getVoteAverage();
+        this.genres = movie.getGenres().stream().map(GenreDTO::new).collect(Collectors.toList());
+    }
 }
