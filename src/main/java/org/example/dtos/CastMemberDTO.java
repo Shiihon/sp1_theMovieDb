@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.entities.CastMember;
 
-import java.util.Objects;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,18 +23,5 @@ public class CastMemberDTO {
         this.name = castMember.getName();
         this.role = castMember.getRole();
         this.job = castMember.getJob();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CastMemberDTO that = (CastMemberDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(role, that.role) && Objects.equals(job, that.job);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, role, job);
     }
 }
