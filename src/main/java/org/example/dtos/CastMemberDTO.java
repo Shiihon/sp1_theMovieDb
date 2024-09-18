@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.entities.CastMember;
 
 @Data
 @NoArgsConstructor
@@ -16,4 +17,11 @@ public class CastMemberDTO {
     @JsonProperty("known_for_department")
     private String role;
     private String job;
+
+    public CastMemberDTO(CastMember castMember) {
+        this.id = castMember.getId();
+        this.name = castMember.getName();
+        this.role = castMember.getRole();
+        this.job = castMember.getJob();
+    }
 }
