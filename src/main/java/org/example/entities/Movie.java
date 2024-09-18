@@ -31,6 +31,8 @@ public class Movie {
     private Double voteAverage;
     @ManyToMany
     private List<Genre> genres;
+    @ManyToMany
+    private List<CastMember> cast;
 
     public Movie(MovieDTO movieDTO) {
         this.id = movieDTO.getId();
@@ -40,5 +42,6 @@ public class Movie {
         this.releaseDate = movieDTO.getReleaseDate();
         this.voteAverage = movieDTO.getVoteAverage();
         this.genres = movieDTO.getGenres().stream().map(Genre::new).collect(Collectors.toList());
+        this.cast = movieDTO.getCast().stream().map(CastMember::new).collect(Collectors.toList());
     }
 }

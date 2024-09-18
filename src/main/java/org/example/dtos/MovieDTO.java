@@ -26,6 +26,7 @@ public class MovieDTO {
     @JsonProperty("vote_average")
     private Double voteAverage;
     private List<GenreDTO> genres;
+    private List<CastMemberDTO> cast;
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
@@ -35,5 +36,6 @@ public class MovieDTO {
         this.releaseDate = movie.getReleaseDate();
         this.voteAverage = movie.getVoteAverage();
         this.genres = movie.getGenres().stream().map(GenreDTO::new).collect(Collectors.toList());
+        this.cast = movie.getCast().stream().map(CastMemberDTO::new).collect(Collectors.toList());
     }
 }
