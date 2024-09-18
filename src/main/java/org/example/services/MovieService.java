@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 public class MovieService {
 
     private final String BASE_URL = "https://api.themoviedb.org/3";
-    private final String API_KEY = System.getenv("api_key");
+    private final String API_TOKEN = System.getenv("api_token");
 
     private final ObjectMapper objectMapper;
 
@@ -34,7 +34,7 @@ public class MovieService {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/movie/" + id + "/credits"))
                     .header("Accept", "Application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Authorization", "Bearer " + API_TOKEN)
                     .GET()
                     .build();
 
@@ -79,7 +79,7 @@ public class MovieService {
 
                 HttpRequest request = HttpRequest.newBuilder()
                         .header("Accept", "application/json")
-                        .header("Authorization", "Bearer " + API_KEY)
+                        .header("Authorization", "Bearer " + API_TOKEN)
                         .uri(URI.create(builder.toString()))
                         .GET()
                         .build();
@@ -117,7 +117,7 @@ public class MovieService {
             HttpRequest request = HttpRequest
                     .newBuilder()
                     .header("Accept", "application/json")
-                    .header("Authorization", "Bearer " + API_KEY)
+                    .header("Authorization", "Bearer " + API_TOKEN)
                     .uri(URI.create(builder.toString()))
                     .GET()
                     .build();
