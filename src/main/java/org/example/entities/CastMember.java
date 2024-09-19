@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dtos.CastMemberDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -27,10 +27,16 @@ public class CastMember {
     @ManyToMany(mappedBy = "cast")
     private List<Movie> movies;
 
-    public CastMember(CastMemberDTO castMemberDTO) {
-        this.id = castMemberDTO.getId();
-        this.name = castMemberDTO.getName();
-        this.role = castMemberDTO.getRole();
-        this.job = castMemberDTO.getJob();
+    public CastMember(Long id, String name, String role, String job) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.job = job;
+        this.movies = new ArrayList<>();
+    }
+
+    public void addMovie(Movie movie) {
+        movies.add(movie);
+        movie.getCast().add(this);
     }
 }
