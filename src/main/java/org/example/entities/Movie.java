@@ -13,6 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQueries({
+        @NamedQuery(name = "Movie.getAll", query = "SELECT m FROM Movie m")
+})
 @Entity
 @Table(name = "movie")
 public class Movie {
