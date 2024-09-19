@@ -2,14 +2,12 @@ package org.example.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.dtos.CastMemberDTO;
 import org.example.dtos.GenreDTO;
 import org.example.dtos.MovieDTO;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
 
 class MovieServiceTest {
     private static MovieService movieService;
@@ -20,6 +18,7 @@ class MovieServiceTest {
     static void beforeAll() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
+
         movieService = new MovieService(objectMapper);
     }
 
@@ -42,14 +41,11 @@ class MovieServiceTest {
 
     }
 
-    @AfterEach
-    void tearDown() throws Exception {
-    }
-
     @Test
     void getCastMembersByMovieId() {
         int expected = 123;
         int actual = movieService.getCastMembersByMovieId(120).size();
+
         Assertions.assertEquals(expected, actual);
     }
 
@@ -57,6 +53,7 @@ class MovieServiceTest {
     void getMoviesByCountry() {
         int expected = 1307; // For danish movies.
         int actual = movieService.getMoviesByCountry("DK").size();
+
         Assertions.assertEquals(expected, actual);
     }
 
@@ -64,7 +61,7 @@ class MovieServiceTest {
     void getMovieById() {
         MovieDTO expected = m1;
         MovieDTO actual = movieService.getMovieById(expected.getId().intValue());
+
         Assertions.assertEquals(expected, actual);
     }
-
 }
