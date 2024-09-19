@@ -18,4 +18,8 @@ public class GenreDTO {
         this.id = genre.getId();
         this.name = genre.getName();
     }
+
+    public Genre getAsEntity() {
+        return new Genre(id, name);
+    }
 }
