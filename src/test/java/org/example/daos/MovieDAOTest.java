@@ -8,12 +8,14 @@ import org.example.dtos.CastMemberDTO;
 import org.example.dtos.GenreDTO;
 import org.example.dtos.MovieDTO;
 import org.example.entities.Genre;
+import org.example.entities.Movie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -108,7 +110,19 @@ class MovieDAOTest {
 
             genreDTOS.stream().map(GenreDTO::getAsEntity).forEach(em::persist);
             castMemberDTOs.stream().map(CastMemberDTO::getAsEntity).forEach(em::persist);
-            movieDTOS.stream().map(MovieDTO::getAsEntity).forEach(em::persist);
+            movieDTOS.stream().map(movieDTO -> {
+                List<Genre> foundGenres = new ArrayList<>();
+                Movie movie = movieDTO.getAsEntity();
+
+                movieDTO.getGenreIds().forEach(genreId -> {
+                    Genre foundGenre = em.find(Genre.class, genreId);
+                    foundGenres.add(foundGenre);
+                });
+
+                movie.setGenres(foundGenres);
+
+                return movie;
+            }).forEach(em::persist);
 
             em.getTransaction().commit();
         }
