@@ -71,12 +71,12 @@ class MovieServiceTest {
     }
 
     @Test
-    void getAllGenres() {
+    void testGetAllGenres() {
         int expectedSize = 19;
 
-        Set<GenreDTO> actualGenres = movieService.getAllGenres();
+        Set<GenreDTO> actualGenreDTOs = movieService.getAllGenres();
 
-        Assertions.assertEquals(expectedSize, actualGenres.size());
-        Assertions.assertTrue(actualGenres.containsAll(genreDTOs));
+        Assertions.assertEquals(expectedSize, actualGenreDTOs.size());
+        Assertions.assertTrue(actualGenreDTOs.containsAll(genreDTOs));
     }
 }
