@@ -82,7 +82,7 @@ class MovieDAOTest {
                         174.601,
                         LocalDate.of(2001, 12, 18),
                         8.4,
-                        List.of(genreDTOS.get(0), genreDTOS.get(1), genreDTOS.get(2)),
+                        List.of(genreDTOS.get(0).getId(), genreDTOS.get(1).getId(), genreDTOS.get(2).getId()),
                         List.of(castMemberDTOs.get(0), castMemberDTOs.get(1), castMemberDTOs.get(2))
                 ),
                 new MovieDTO(
@@ -92,7 +92,7 @@ class MovieDAOTest {
                         124.454,
                         LocalDate.of(2002, 12, 18),
                         8.398,
-                        List.of(genreDTOS.get(0), genreDTOS.get(1), genreDTOS.get(2)),
+                        List.of(genreDTOS.get(0).getId(), genreDTOS.get(1).getId(), genreDTOS.get(2).getId()),
                         List.of(castMemberDTOs.get(2), castMemberDTOs.get(3), castMemberDTOs.get(4))
                 )
         );
@@ -139,7 +139,7 @@ class MovieDAOTest {
                 223.304,
                 LocalDate.of(2003, 12, 17),
                 8.48,
-                List.of(genreDTOS.get(0), genreDTOS.get(1), genreDTOS.get(2)),
+                List.of(genreDTOS.get(0).getId(), genreDTOS.get(1).getId(), genreDTOS.get(2).getId()),
                 List.of(
                         new CastMemberDTO(
                                 65L,
