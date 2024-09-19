@@ -41,4 +41,20 @@ public class MovieDTO {
         this.genres = movie.getGenres().stream().map(GenreDTO::new).collect(Collectors.toList());
         this.cast = movie.getCast().stream().map(CastMemberDTO::new).collect(Collectors.toList());
     }
+
+    public Movie getAsEntity() {
+        return new Movie(id,
+                originalTitle,
+                overview,
+                popularity,
+                releaseDate,
+                voteAverage,
+                genres.stream().map(GenreDTO::getAsEntity).collect(Collectors.toList()),
+                cast.stream().map(CastMemberDTO::getAsEntity).collect(Collectors.toList())
+        );
+    }
+
+    public void addCastMemberDTO(CastMemberDTO castMemberDTO) {
+        this.cast.add(castMemberDTO);
+    }
 }
