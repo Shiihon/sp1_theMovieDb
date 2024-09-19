@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,6 +35,17 @@ public class Movie {
     private List<Genre> genres;
     @ManyToMany
     private List<CastMember> cast;
+
+    public Movie(Long id, String originalTitle, String overview, Double popularity, LocalDate releaseDate, Double voteAverage, List<CastMember> cast) {
+        this.id = id;
+        this.originalTitle = originalTitle;
+        this.overview = overview;
+        this.popularity = popularity;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
+        this.cast = cast;
+        this.genres = new ArrayList<>();
+    }
 
     public void addCastMember(CastMember castMember) {
         this.cast.add(castMember);
