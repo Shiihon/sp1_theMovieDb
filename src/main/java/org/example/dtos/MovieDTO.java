@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class MovieDTO {
     @JsonProperty("release_date")
     private LocalDate releaseDate;
     @JsonProperty("vote_average")
+    @EqualsAndHashCode.Exclude
     private Double voteAverage;
     private List<GenreDTO> genres;
 }
