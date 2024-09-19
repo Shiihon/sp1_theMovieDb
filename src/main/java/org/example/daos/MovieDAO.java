@@ -103,14 +103,12 @@ public class MovieDAO implements IDAO<MovieDTO> {
                 List<CastMember> foundCastMembers = new ArrayList<>();
 
                 movie.getCast().forEach(castMember -> {
-                    TypedQuery<CastMember> query = em.createQuery("SELECT c FROM CastMember c WHERE c.id = :id", CastMember.class);
-                    query.setParameter("id", castMember.getId());
-                    query.setMaxResults(1);
+                    CastMember foundCastMember = em.find(CastMember.class, castMember.getId());
 
-                    try {
-                        foundCastMembers.add(query.getSingleResult());
-                    } catch (NoResultException e) {
-                        throw new EntityNotFoundException(String.format("Could not find cast member with id '%d' in database.", castMember.getId()), e);
+                    if (foundCastMember != null) {
+                        foundCastMembers.add(foundCastMember);
+                    } else {
+                        throw new EntityNotFoundException(String.format("A CastMember with id %d could not be found.", castMember.getId()));
                     }
                 });
 

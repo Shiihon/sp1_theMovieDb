@@ -93,7 +93,7 @@ class MovieDAOTest {
                         LocalDate.of(2002, 12, 18),
                         8.398,
                         List.of(genreDTOS.get(0), genreDTOS.get(1), genreDTOS.get(2)),
-                        List.of(castMemberDTOs.get(3), castMemberDTOs.get(4))
+                        List.of(castMemberDTOs.get(2), castMemberDTOs.get(3), castMemberDTOs.get(4))
                 )
         );
 
