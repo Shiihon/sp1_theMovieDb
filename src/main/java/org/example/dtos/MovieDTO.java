@@ -21,6 +21,7 @@ public class MovieDTO {
     @JsonProperty("original_title")
     private String originalTitle;
     private String overview;
+    @EqualsAndHashCode.Exclude
     private Double popularity;
     @JsonProperty("release_date")
     private LocalDate releaseDate;
