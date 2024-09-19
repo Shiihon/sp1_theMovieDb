@@ -5,16 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dtos.MovieDTO;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@NamedQueries({
+        @NamedQuery(name = "Movie.getAll", query = "SELECT m FROM Movie m")
+})
 @Entity
 @Table(name = "movie")
 public class Movie {
@@ -34,14 +35,8 @@ public class Movie {
     @ManyToMany
     private List<CastMember> cast;
 
-    public Movie(MovieDTO movieDTO) {
-        this.id = movieDTO.getId();
-        this.originalTitle = movieDTO.getOriginalTitle();
-        this.overview = movieDTO.getOverview();
-        this.popularity = movieDTO.getPopularity();
-        this.releaseDate = movieDTO.getReleaseDate();
-        this.voteAverage = movieDTO.getVoteAverage();
-        this.genres = movieDTO.getGenres().stream().map(Genre::new).collect(Collectors.toList());
-        this.cast = movieDTO.getCast().stream().map(CastMember::new).collect(Collectors.toList());
+    public void addCastMember(CastMember castMember) {
+        this.cast.add(castMember);
+        castMember.getMovies().add(this);
     }
 }
