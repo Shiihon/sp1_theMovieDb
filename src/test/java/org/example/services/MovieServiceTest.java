@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 class MovieServiceTest {
     private static MovieService movieService;
-
     private List<GenreDTO> genreDTOs;
     private MovieDTO movieDTO;
 
@@ -68,5 +68,15 @@ class MovieServiceTest {
         MovieDTO actual = movieService.getMovieById(expected.getId().intValue());
 
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetAllGenres() {
+        int expectedSize = 19;
+
+        Set<GenreDTO> actualGenreDTOs = movieService.getAllGenres();
+
+        Assertions.assertEquals(expectedSize, actualGenreDTOs.size());
+        Assertions.assertTrue(actualGenreDTOs.containsAll(genreDTOs));
     }
 }

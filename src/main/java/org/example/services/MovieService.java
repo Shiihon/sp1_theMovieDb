@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.dtos.CastMemberDTO;
+import org.example.dtos.GenreDTO;
 import org.example.dtos.MovieDTO;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -140,6 +142,35 @@ public class MovieService {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        return null;
+    }
+
+    public Set<GenreDTO> getAllGenres() {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(BASE_URL + "/genre/movie/list"))
+                    .header("Accept", "Application/json")
+                    .header("Authorization", "Bearer " + API_TOKEN)
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                JsonNode json = objectMapper.readTree(response.body());
+                GenreDTO[] genres = objectMapper.treeToValue(json.get("genres"), GenreDTO[].class);
+
+                if (genres.length > 0) {
+                    return Arrays.stream(genres).collect(Collectors.toSet());
+                }
+            } else {
+                System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 }
