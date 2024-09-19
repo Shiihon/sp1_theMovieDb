@@ -22,7 +22,7 @@ public class CastMemberDTO {
     @JsonProperty("known_for_department")
     private String role;
     private String job;
-    private List<Long> movieIds;
+    private List<Long> movieIds = new ArrayList<>();
 
     public CastMemberDTO(CastMember castMember) {
         this.id = castMember.getId();
