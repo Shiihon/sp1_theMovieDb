@@ -52,7 +52,7 @@ public class MovieService {
                 if (!castMembersSet.isEmpty()) {
                     return castMembersSet.stream().filter(c -> c.getRole().equals("Acting") || c.getJob() != null && c.getJob().equals("Director")).collect(Collectors.toSet());
                 } else {
-                    System.out.println("No information for cast members found.");
+                    return castMembersSet;
                 }
             } else {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
@@ -60,7 +60,6 @@ public class MovieService {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -134,7 +133,12 @@ public class MovieService {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                return objectMapper.readValue(response.body(), MovieDTO.class);
+                JsonNode json = objectMapper.readTree(response.body());
+                MovieDTO movieDTO = objectMapper.treeToValue(json, MovieDTO.class);
+
+                json.get("genres").forEach(genre -> movieDTO.getGenreIds().add(genre.get("id").asLong()));
+
+                return movieDTO;
             } else {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }

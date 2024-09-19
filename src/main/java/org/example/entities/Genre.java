@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.dtos.GenreDTO;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +18,4 @@ public class Genre {
     @Id
     private Long id;
     private String name;
-
-    public Genre(GenreDTO genreDTO) {
-        this.id = genreDTO.getId();
-        this.name = genreDTO.getName();
-    }
 }
