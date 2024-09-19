@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManagerFactory;
 import org.example.entities.CastMember;
 import org.example.entities.Genre;
 import org.example.entities.Movie;
-import org.example.entities.MovieCast;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -38,7 +37,6 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(CastMember.class);
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(Genre.class);
-        configuration.addAnnotatedClass(MovieCast.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName) {
