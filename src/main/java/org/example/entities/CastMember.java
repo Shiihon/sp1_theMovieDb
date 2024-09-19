@@ -1,10 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +22,7 @@ public class CastMember {
     private String role;
     private String job;
     @ManyToMany(mappedBy = "cast")
+    @ToString.Exclude
     private List<Movie> movies;
 
     public CastMember(Long id, String name, String role, String job) {
