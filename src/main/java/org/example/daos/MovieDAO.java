@@ -48,21 +48,21 @@ public class MovieDAO implements IDAO<MovieDTO> {
         }
     }
 
-    public Set<MovieDTO> getTopTenHighest (){
+    public Set<MovieDTO> getTopTenHighest() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage DESC", Movie.class);
-           return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
+            return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
     }
 
-    public Set<MovieDTO> getTopTenLowest (){
+    public Set<MovieDTO> getTopTenLowest() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage", Movie.class);
             return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
     }
 
-    public Set<MovieDTO> getTopTenMostPopular (){
+    public Set<MovieDTO> getTopTenMostPopular() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.popularity DESC", Movie.class);
             return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
