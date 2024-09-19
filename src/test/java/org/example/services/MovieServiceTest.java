@@ -41,8 +41,8 @@ class MovieServiceTest {
                 174.601,
                 LocalDate.of(2001, 12, 18),
                 8.4,
-                List.of(genreDTOs.get(0), genreDTOs.get(1), genreDTOs.get(2)),
-                null
+                List.of(genreDTOs.get(0).getId(), genreDTOs.get(1).getId(), genreDTOs.get(2).getId()),
+                List.of()
         );
     }
 
