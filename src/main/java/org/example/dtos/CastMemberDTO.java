@@ -49,7 +49,7 @@ public class CastMemberDTO {
         );
     }
 
-    public void addMovieDTO(Long movieId) {
+    public void addMovieId(Long movieId) {
         this.movieIds.add(movieId);
     }
 }

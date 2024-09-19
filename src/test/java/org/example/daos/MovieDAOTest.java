@@ -97,7 +97,7 @@ class MovieDAOTest {
                 )
         );
 
-        movieDTOS.forEach(movie -> movie.getCast().forEach(castMemberDTO -> castMemberDTO.addMovieDTO(movie.getId())));
+        movieDTOS.forEach(movie -> movie.getCast().forEach(castMemberDTO -> castMemberDTO.addMovieId(movie.getId())));
 
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
