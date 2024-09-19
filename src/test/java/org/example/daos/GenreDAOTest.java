@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.config.HibernateConfig;
 import org.example.dtos.GenreDTO;
-import org.example.entities.Genre;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +16,14 @@ import java.util.Set;
 
 class GenreDAOTest {
     private static EntityManagerFactory emf;
-    private static GenreDAO dao;
+    private static GenreDAO genreDAO;
 
     private List<GenreDTO> genreDTOS;
 
     @BeforeAll
     static void beforeAll() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
-        dao = new GenreDAO(emf);
+        genreDAO = new GenreDAO(emf);
     }
 
     @BeforeEach
@@ -39,7 +38,7 @@ class GenreDAOTest {
 
             em.createQuery("DELETE FROM Genre").executeUpdate();
 
-            genreDTOS.stream().map(Genre::new).forEach(em::persist);
+            genreDTOS.stream().map(GenreDTO::getAsEntity).forEach(em::persist);
 
             em.getTransaction().commit();
         }
@@ -48,7 +47,7 @@ class GenreDAOTest {
     @Test
     void getById() {
         GenreDTO expected = genreDTOS.get(0);
-        GenreDTO actual = dao.getById(expected.getId());
+        GenreDTO actual = genreDAO.getById(expected.getId());
 
         Assertions.assertEquals(expected, actual);
     }
@@ -56,7 +55,7 @@ class GenreDAOTest {
     @Test
     void getAll() {
         Set<GenreDTO> expected = new HashSet<>(genreDTOS);
-        Set<GenreDTO> actual = dao.getAll();
+        Set<GenreDTO> actual = genreDAO.getAll();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -65,8 +64,8 @@ class GenreDAOTest {
     void create() {
         GenreDTO genre = new GenreDTO(18L, "Drama");
 
-        GenreDTO expected = dao.create(genre);
-        GenreDTO actual = dao.getById(expected.getId());
+        GenreDTO expected = genreDAO.create(genre);
+        GenreDTO actual = genreDAO.getById(expected.getId());
 
         Assertions.assertEquals(expected, actual);
     }
@@ -77,7 +76,7 @@ class GenreDAOTest {
 
         expected.setName("Drama");
 
-        GenreDTO actual = dao.update(expected);
+        GenreDTO actual = genreDAO.update(expected);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -86,8 +85,8 @@ class GenreDAOTest {
     void delete() {
         GenreDTO genre = genreDTOS.get(0);
 
-        dao.delete(genre.getId());
+        genreDAO.delete(genre.getId());
 
-        Assertions.assertThrowsExactly(EntityNotFoundException.class, () -> dao.getById(genre.getId()));
+        Assertions.assertThrowsExactly(EntityNotFoundException.class, () -> genreDAO.getById(genre.getId()));
     }
 }

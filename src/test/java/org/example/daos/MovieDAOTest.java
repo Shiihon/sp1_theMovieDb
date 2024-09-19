@@ -106,7 +106,7 @@ class MovieDAOTest {
             em.createQuery("DELETE FROM Movie").executeUpdate();
             em.createQuery("DELETE FROM Genre").executeUpdate();
 
-            genreDTOS.stream().map(Genre::new).forEach(em::persist);
+            genreDTOS.stream().map(GenreDTO::getAsEntity).forEach(em::persist);
             castMemberDTOs.stream().map(CastMemberDTO::getAsEntity).forEach(em::persist);
             movieDTOS.stream().map(MovieDTO::getAsEntity).forEach(em::persist);
 
