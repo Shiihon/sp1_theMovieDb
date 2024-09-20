@@ -54,7 +54,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
     public Set<MovieDTO> getTopTenAverage(boolean isAsc) {
         try (EntityManager em = emf.createEntityManager()) {
             String sort = isAsc ? "ASC" : "DESC";
-            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByAverage " + sort, Movie.class);
+            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByAverage" + sort, Movie.class);
 
             return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
