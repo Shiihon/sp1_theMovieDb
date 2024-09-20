@@ -1,11 +1,11 @@
-package org.example.services;
+package app.services;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.dtos.CastMemberDTO;
-import org.example.dtos.GenreDTO;
-import org.example.dtos.MovieDTO;
+import app.dtos.CastMemberDTO;
+import app.dtos.GenreDTO;
+import app.dtos.MovieDTO;
 
 import java.io.IOException;
 import java.net.URI;
@@ -31,7 +31,7 @@ public class MovieService {
         this.objectMapper = objectMapper;
     }
 
-    public Set<CastMemberDTO> getCastMembersByMovieId(int id) {
+    public Set<CastMemberDTO> getCastMembersByMovieId(Integer id) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(BASE_URL + "/movie/" + id + "/credits"))
@@ -54,18 +54,19 @@ public class MovieService {
                 } else {
                     return castMembersSet;
                 }
+
             } else {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
     public Set<MovieDTO> getMoviesByCountry(String country) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
             Set<MovieDTO> movies = new HashSet<>();
 
             LocalDate endYear = LocalDate.of(2024, 1, 1);
@@ -92,7 +93,7 @@ public class MovieService {
                         .GET()
                         .build();
 
-                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (response.statusCode() == 200) {
                     JsonNode json = objectMapper.readTree(response.body());
@@ -110,14 +111,13 @@ public class MovieService {
             return movies;
         } catch (IOException | InterruptedException | RuntimeException e) {
             e.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
-    public MovieDTO getMovieById(int id) {
+    public MovieDTO getMovieById(Integer id) {
         try {
-            HttpClient httpClient = HttpClient.newHttpClient();
-
             StringBuilder builder = new StringBuilder(BASE_URL)
                     .append("/movie/")
                     .append(id);
@@ -130,19 +130,18 @@ public class MovieService {
                     .GET()
                     .build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
                 JsonNode json = objectMapper.readTree(response.body());
                 MovieDTO movieDTO = objectMapper.treeToValue(json, MovieDTO.class);
 
-                json.get("genres").forEach(genre -> movieDTO.getGenreIds().add(genre.get("id").asLong()));
+                json.get("genres").forEach(genre -> movieDTO.addGenreId(genre.get("id").asInt()));
 
                 return movieDTO;
             } else {
                 System.out.println("GET request failed. Status code: " + response.statusCode());
             }
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
