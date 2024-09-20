@@ -31,11 +31,6 @@ class MovieDAOTest {
         movieDAO = new MovieDAO(emfTest);
     }
 
-    @AfterAll
-    public static void tearDown() {
-        emfTest.close();
-    }
-
     @BeforeEach
     void setUp() {
         genreDTOs = List.of(
