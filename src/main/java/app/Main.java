@@ -28,10 +28,10 @@ public class Main {
         //saveAllMoviesInDB("DK");
 
         //Opgave 2
-        //  displayAllMoviesInDB();
+        //displayAllMoviesInDB();
 
         //Opgave 3
-        // displayAllMoviesInDBWithDetails();
+        //displayAllMoviesInDBWithDetails();
 
         //Opgave 4
 
@@ -63,7 +63,7 @@ public class Main {
         MovieDAO movieDAO = new MovieDAO(emf);
         for (MovieDTO movieDTO : movies) {
             Set<CastMemberDTO> castMembers = movieService.getCastMembersByMovieId(movieDTO.getId());
-            movieDTO.setCast(new HashSet<>(castMembers));
+            movieDTO.setCast(castMembers);
             movieDAO.create(movieDTO);
         }
     }
