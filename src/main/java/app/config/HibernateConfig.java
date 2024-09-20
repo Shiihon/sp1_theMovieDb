@@ -1,9 +1,9 @@
-package org.example.config;
+package app.config;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.example.entities.CastMember;
-import org.example.entities.Genre;
-import org.example.entities.Movie;
+import app.entities.CastMember;
+import app.entities.Genre;
+import app.entities.Movie;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
