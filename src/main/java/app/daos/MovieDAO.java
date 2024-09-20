@@ -148,7 +148,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
                 foundMovie.setVoteAverage(movie.getVoteAverage());
             }
             if (!movie.getGenres().isEmpty()) {
-                foundMovie.setGenres(new HashSet<>(getMovieGenres(movieDTO)));
+                foundMovie.setGenres(getMovieGenres(movieDTO));
             }
             if (!movie.getCast().isEmpty()) {
                 Set<CastMember> foundCastMembers = new HashSet<>();
