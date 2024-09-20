@@ -28,6 +28,7 @@ public class MovieDTO {
     @JsonProperty("release_date")
     private LocalDate releaseDate;
     @JsonProperty("vote_average")
+    @EqualsAndHashCode.Exclude
     private Double voteAverage;
     @JsonProperty("genre_ids")
     private Set<Integer> genreIds;
