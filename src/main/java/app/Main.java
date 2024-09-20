@@ -1,18 +1,18 @@
-package org.example;
+package app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.persistence.EntityManagerFactory;
-import org.example.config.HibernateConfig;
-import org.example.daos.GenreDAO;
-import org.example.daos.MovieDAO;
-import org.example.dtos.CastMemberDTO;
-import org.example.dtos.GenreDTO;
-import org.example.dtos.MovieDTO;
-import org.example.services.MovieService;
+import app.config.HibernateConfig;
+import app.daos.GenreDAO;
+import app.daos.MovieDAO;
+import app.dtos.CastMemberDTO;
+import app.dtos.GenreDTO;
+import app.dtos.MovieDTO;
+import app.services.MovieService;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class Main {
     private static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("movie_database");
@@ -62,8 +62,8 @@ public class Main {
 
         MovieDAO movieDAO = new MovieDAO(emf);
         for (MovieDTO movieDTO : movies) {
-            Set<CastMemberDTO> castMembers = movieService.getCastMembersByMovieId(movieDTO.getId().intValue());
-            movieDTO.setCast(castMembers.stream().toList());
+            Set<CastMemberDTO> castMembers = movieService.getCastMembersByMovieId(movieDTO.getId());
+            movieDTO.setCast(new HashSet<>(castMembers));
             movieDAO.create(movieDTO);
         }
     }
@@ -100,13 +100,13 @@ public class Main {
     }
 
     public static void displayTopTenHighest() {
-        Set<MovieDTO> movies = movieDAO.getTopTenHighest();
+        Set<MovieDTO> movies = movieDAO.getTopTenAverage(false);
         System.out.println(movies.size());
         movies.forEach(movie -> System.out.printf("%s%n%n", movie));
     }
 
     public static void displayTopTenLowest() {
-        Set<MovieDTO> movies = movieDAO.getTopTenLowest();
+        Set<MovieDTO> movies = movieDAO.getTopTenAverage(true);
         System.out.println(movies.size());
         movies.forEach(movie -> System.out.printf("%s%n%n", movie));
     }
