@@ -99,7 +99,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            List<CastMember> foundCastMembers = new ArrayList<>();
+            Set<CastMember> foundCastMembers = new HashSet<>();
 
             movie.getCast().forEach(castMember -> {
                 CastMember foundCastMember = em.find(CastMember.class, castMember.getId());
@@ -115,8 +115,8 @@ public class MovieDAO implements IDAO<MovieDTO> {
 
             foundCastMembers.forEach(castMember -> castMember.addMovie(movie));
 
-            movie.setCast(new HashSet<>(foundCastMembers));
-            movie.setGenres(new HashSet<>(getMovieGenres(movieDTO)));
+            movie.setCast(foundCastMembers);
+            movie.setGenres(getMovieGenres(movieDTO));
 
             em.persist(movie);
             em.getTransaction().commit();
@@ -153,7 +153,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
                 foundMovie.setGenres(new HashSet<>(getMovieGenres(movieDTO)));
             }
             if (!movie.getCast().isEmpty()) {
-                List<CastMember> foundCastMembers = new ArrayList<>();
+                Set<CastMember> foundCastMembers = new HashSet<>();
 
                 movie.getCast().forEach(castMember -> {
                     CastMember foundCastMember = em.find(CastMember.class, castMember.getId());
@@ -165,7 +165,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
                     }
                 });
 
-                foundMovie.setCast(new HashSet<>(foundCastMembers));
+                foundMovie.setCast(foundCastMembers);
             }
 
             em.getTransaction().commit();
@@ -174,9 +174,9 @@ public class MovieDAO implements IDAO<MovieDTO> {
         }
     }
 
-    private List<Genre> getMovieGenres(MovieDTO movieDTO) {
+    private Set<Genre> getMovieGenres(MovieDTO movieDTO) {
         try (EntityManager em = emf.createEntityManager()) {
-            List<Genre> foundGenres = new ArrayList<>();
+            Set<Genre> foundGenres = new HashSet<>();
 
             movieDTO.getGenreIds().forEach(genreId -> {
                 TypedQuery<Genre> query = em.createNamedQuery("Genre.getById", Genre.class);
