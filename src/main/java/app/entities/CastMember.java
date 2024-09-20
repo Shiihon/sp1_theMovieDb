@@ -1,10 +1,10 @@
-package org.example.entities;
+package app.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,23 +17,27 @@ import java.util.List;
 @Table(name = "cast_member")
 public class CastMember {
     @Id
-    private Long id;
+    private Integer id;
     private String name;
     private String role;
     private String job;
     @ManyToMany(mappedBy = "cast")
-    @ToString.Exclude
-    private List<Movie> movies;
+    @EqualsAndHashCode.Exclude
+    private Set<Movie> movies;
 
-    public CastMember(Long id, String name, String role, String job) {
+    public CastMember(Integer id, String name, String role, String job) {
         this.id = id;
         this.name = name;
         this.role = role;
         this.job = job;
-        this.movies = new ArrayList<>();
+        this.movies = new HashSet<>();
     }
 
     public void addMovie(Movie movie) {
+        if (this.movies == null) {
+            movies = new HashSet<>();
+        }
+
         movies.add(movie);
         movie.getCast().add(this);
     }

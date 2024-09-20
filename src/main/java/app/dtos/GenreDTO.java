@@ -1,17 +1,17 @@
-package org.example.dtos;
+package app.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.entities.Genre;
+import app.entities.Genre;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GenreDTO {
-    private Long id;
+    private Integer id;
     private String name;
 
     public GenreDTO(Genre genre) {
@@ -20,6 +20,9 @@ public class GenreDTO {
     }
 
     public Genre getAsEntity() {
-        return new Genre(id, name);
+        return new Genre(
+                id,
+                name
+        );
     }
 }

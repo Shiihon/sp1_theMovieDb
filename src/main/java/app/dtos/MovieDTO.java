@@ -1,4 +1,4 @@
-package org.example.dtos;
+package app.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,12 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.example.entities.Genre;
-import org.example.entities.Movie;
+import app.entities.Genre;
+import app.entities.Movie;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MovieDTO {
-    private Long id;
+    private Integer id;
     @JsonProperty("original_title")
     private String originalTitle;
     private String overview;
@@ -31,8 +31,8 @@ public class MovieDTO {
     @EqualsAndHashCode.Exclude
     private Double voteAverage;
     @JsonProperty("genre_ids")
-    private List<Long> genreIds = new ArrayList<>();
-    private List<CastMemberDTO> cast = new ArrayList<>();
+    private Set<Integer> genreIds;
+    private Set<CastMemberDTO> cast;
 
     public MovieDTO(Movie movie) {
         this.id = movie.getId();
@@ -41,22 +41,35 @@ public class MovieDTO {
         this.popularity = movie.getPopularity();
         this.releaseDate = movie.getReleaseDate();
         this.voteAverage = movie.getVoteAverage();
-        this.genreIds = movie.getGenres().stream().map(Genre::getId).collect(Collectors.toList());
-        this.cast = movie.getCast().stream().map(CastMemberDTO::new).collect(Collectors.toList());
+        this.genreIds = movie.getGenres().stream().map(Genre::getId).collect(Collectors.toSet());
+        this.cast = movie.getCast().stream().map(CastMemberDTO::new).collect(Collectors.toSet());
     }
 
     public Movie getAsEntity() {
-        return new Movie(id,
+        return new Movie(
+                id,
                 originalTitle,
                 overview,
                 popularity,
                 releaseDate,
                 voteAverage,
-                cast.stream().map(CastMemberDTO::getAsEntity).collect(Collectors.toList())
+                cast.stream().map(CastMemberDTO::getAsEntity).collect(Collectors.toSet())
         );
     }
 
     public void addCastMemberDTO(CastMemberDTO castMemberDTO) {
+        if (this.cast == null) {
+            cast = new HashSet<>();
+        }
+
         this.cast.add(castMemberDTO);
+    }
+
+    public void addGenreId(Integer id) {
+        if (this.genreIds == null) {
+            genreIds = new HashSet<>();
+        }
+
+        this.genreIds.add(id);
     }
 }

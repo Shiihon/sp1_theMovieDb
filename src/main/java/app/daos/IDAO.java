@@ -1,9 +1,9 @@
-package org.example.daos;
+package app.daos;
 
 import java.util.Set;
 
 public interface IDAO<T> {
-    T getById(Long id);
+    T getById(Integer id);
 
     Set<T> getAll();
 
@@ -11,5 +11,5 @@ public interface IDAO<T> {
 
     T update(T t);
 
-    void delete(Long id);
+    void delete(Integer id);
 }

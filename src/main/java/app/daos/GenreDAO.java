@@ -1,8 +1,8 @@
-package org.example.daos;
+package app.daos;
 
 import jakarta.persistence.*;
-import org.example.dtos.GenreDTO;
-import org.example.entities.Genre;
+import app.dtos.GenreDTO;
+import app.entities.Genre;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,7 +15,7 @@ public class GenreDAO implements IDAO<GenreDTO> {
     }
 
     @Override
-    public GenreDTO getById(Long id) {
+    public GenreDTO getById(Integer id) {
         Genre found;
         try (EntityManager em = emf.createEntityManager()) {
             found = em.find(Genre.class, id);
@@ -72,7 +72,7 @@ public class GenreDAO implements IDAO<GenreDTO> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Genre genre = em.find(Genre.class, id);
             if (genre == null) {
