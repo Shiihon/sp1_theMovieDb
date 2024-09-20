@@ -1,15 +1,18 @@
 package app.daos;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
 import app.config.HibernateConfig;
 import app.dtos.CastMemberDTO;
 import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
 import app.entities.Genre;
 import app.entities.Movie;
-import org.junit.jupiter.api.*;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -140,6 +143,7 @@ class MovieDAOTest {
 
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
     void testCreate() {
         MovieDTO movie = new MovieDTO(
