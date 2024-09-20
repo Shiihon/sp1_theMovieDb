@@ -1,68 +1,71 @@
-package org.example.daos;
+package app.daos;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
-import org.example.config.HibernateConfig;
-import org.example.dtos.GenreDTO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import app.config.HibernateConfig;
+import app.dtos.GenreDTO;
+import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 class GenreDAOTest {
-    private static EntityManagerFactory emf;
+    private static EntityManagerFactory emfTest;
     private static GenreDAO genreDAO;
 
-    private List<GenreDTO> genreDTOS;
+    private List<GenreDTO> genreDTOs;
 
     @BeforeAll
     static void beforeAll() {
-        emf = HibernateConfig.getEntityManagerFactoryForTest();
-        genreDAO = new GenreDAO(emf);
+        emfTest = HibernateConfig.getEntityManagerFactoryForTest();
+        genreDAO = new GenreDAO(emfTest);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        emfTest.close();
     }
 
     @BeforeEach
     void setUp() {
-        genreDTOS = List.of(
-                new GenreDTO(12L, "Adventure"),
-                new GenreDTO(14L, "Fantasy"),
-                new GenreDTO(28L, "Action")
+        genreDTOs = List.of(
+                new GenreDTO(12, "Adventure"),
+                new GenreDTO(14, "Fantasy"),
+                new GenreDTO(28, "Action")
         );
-        try (EntityManager em = emf.createEntityManager()) {
+
+        try (EntityManager em = emfTest.createEntityManager()) {
             em.getTransaction().begin();
 
             em.createQuery("DELETE FROM Genre").executeUpdate();
 
-            genreDTOS.stream().map(GenreDTO::getAsEntity).forEach(em::persist);
+            genreDTOs.stream().map(GenreDTO::getAsEntity).forEach(em::persist);
 
             em.getTransaction().commit();
         }
     }
 
     @Test
-    void getById() {
-        GenreDTO expected = genreDTOS.get(0);
+    void testGetById() {
+        GenreDTO expected = genreDTOs.get(0);
         GenreDTO actual = genreDAO.getById(expected.getId());
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void getAll() {
-        Set<GenreDTO> expected = new HashSet<>(genreDTOS);
+    void testGetAll() {
+        Set<GenreDTO> expected = new HashSet<>(genreDTOs);
         Set<GenreDTO> actual = genreDAO.getAll();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
-    void create() {
-        GenreDTO genre = new GenreDTO(18L, "Drama");
+    void testCreate() {
+        GenreDTO genre = new GenreDTO(18, "Drama");
 
         GenreDTO expected = genreDAO.create(genre);
         GenreDTO actual = genreDAO.getById(expected.getId());
@@ -71,8 +74,8 @@ class GenreDAOTest {
     }
 
     @Test
-    void update() {
-        GenreDTO expected = genreDTOS.get(0);
+    void testUpdate() {
+        GenreDTO expected = genreDTOs.get(0);
 
         expected.setName("Drama");
 
@@ -82,8 +85,8 @@ class GenreDAOTest {
     }
 
     @Test
-    void delete() {
-        GenreDTO genre = genreDTOS.get(0);
+    void testDelete() {
+        GenreDTO genre = genreDTOs.get(0);
 
         genreDAO.delete(genre.getId());
 
