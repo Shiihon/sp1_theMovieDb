@@ -1,7 +1,10 @@
 package app.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +17,8 @@ import lombok.*;
 @Table(name = "genre")
 public class Genre {
     @Id
+    @Column(unique = true, nullable = false)
     private Integer id;
+    @Column(unique = true, nullable = false)
     private String name;
 }
