@@ -1,13 +1,14 @@
-package org.example.daos;
+package app.daos;
 
 import jakarta.persistence.*;
-import org.example.dtos.MovieDTO;
-import org.example.entities.CastMember;
-import org.example.entities.Genre;
-import org.example.entities.Movie;
+import app.dtos.MovieDTO;
+import app.entities.CastMember;
+import app.entities.Genre;
+import app.entities.Movie;
 import org.hibernate.Hibernate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
     }
 
     @Override
-    public MovieDTO getById(Long id) {
+    public MovieDTO getById(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie movie = em.find(Movie.class, id);
 
@@ -37,6 +38,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
     public Set<MovieDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Movie> query = em.createNamedQuery("Movie.getAll", Movie.class);
+
             return query.getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
     }
@@ -44,34 +46,31 @@ public class MovieDAO implements IDAO<MovieDTO> {
     public Double getAverageRating() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<Double> query = em.createQuery("SELECT AVG(m.voteAverage) FROM Movie m", Double.class);
+
             return query.getSingleResult();
         }
     }
 
-    public Set<MovieDTO> getTopTenHighest() {
+    public Set<MovieDTO> getTopTenAverage(boolean isAsc) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage DESC", Movie.class);
-            return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
-        }
-    }
+            String sort = isAsc ? "ASC" : "DESC";
+            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByAverage " + sort, Movie.class);
 
-    public Set<MovieDTO> getTopTenLowest() {
-        try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.voteAverage", Movie.class);
             return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
     }
 
     public Set<MovieDTO> getTopTenMostPopular() {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m ORDER BY m.popularity DESC", Movie.class);
+            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByPopularity", Movie.class);
+
             return query.setMaxResults(10).getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
         }
     }
 
     public Set<MovieDTO> getMovieByTitle(String originalTitle) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m WHERE LOWER(m.originalTitle) LIKE LOWER(:originalTitle)", Movie.class);
+            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByTitle", Movie.class);
             query.setParameter("originalTitle", "%" + originalTitle + "%");
 
             return query.getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
@@ -116,8 +115,8 @@ public class MovieDAO implements IDAO<MovieDTO> {
 
             foundCastMembers.forEach(castMember -> castMember.addMovie(movie));
 
-            movie.setCast(foundCastMembers);
-            movie.setGenres(getMovieGenres(movieDTO));
+            movie.setCast(new HashSet<>(foundCastMembers));
+            movie.setGenres(new HashSet<>(getMovieGenres(movieDTO)));
 
             em.persist(movie);
             em.getTransaction().commit();
@@ -151,7 +150,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
                 foundMovie.setVoteAverage(movie.getVoteAverage());
             }
             if (!movie.getGenres().isEmpty()) {
-                foundMovie.setGenres(getMovieGenres(movieDTO));
+                foundMovie.setGenres(new HashSet<>(getMovieGenres(movieDTO)));
             }
             if (!movie.getCast().isEmpty()) {
                 List<CastMember> foundCastMembers = new ArrayList<>();
@@ -166,10 +165,11 @@ public class MovieDAO implements IDAO<MovieDTO> {
                     }
                 });
 
-                foundMovie.setCast(foundCastMembers);
+                foundMovie.setCast(new HashSet<>(foundCastMembers));
             }
 
             em.getTransaction().commit();
+
             return new MovieDTO(foundMovie);
         }
     }
@@ -179,7 +179,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
             List<Genre> foundGenres = new ArrayList<>();
 
             movieDTO.getGenreIds().forEach(genreId -> {
-                TypedQuery<Genre> query = em.createQuery("SELECT g FROM Genre g WHERE g.id = :id", Genre.class);
+                TypedQuery<Genre> query = em.createNamedQuery("Genre.getById", Genre.class);
                 query.setParameter("id", genreId);
                 query.setMaxResults(1);
 
@@ -196,7 +196,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
 
     public Set<MovieDTO> getMoviesWithinGenre(Long genreId) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<Movie> query = em.createQuery("SELECT m FROM Movie m JOIN m.genres g WHERE g.id = :genreId", Movie.class);
+            TypedQuery<Movie> query = em.createNamedQuery("Movie.getByGenre", Movie.class);
             query.setParameter("genreId", genreId);
 
             return query.getResultStream().map(MovieDTO::new).collect(Collectors.toSet());
@@ -204,7 +204,7 @@ public class MovieDAO implements IDAO<MovieDTO> {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         try (EntityManager em = emf.createEntityManager()) {
             Movie movie = em.find(Movie.class, id);
 
