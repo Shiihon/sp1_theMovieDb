@@ -34,10 +34,8 @@ public class Movie {
     @Column(name = "vote_average")
     private Double voteAverage;
     @ManyToMany
-    @EqualsAndHashCode.Exclude
     private Set<Genre> genres;
     @ManyToMany
-    @EqualsAndHashCode.Exclude
     private Set<CastMember> cast;
 
     public Movie(Integer id, String originalTitle, String overview, Double popularity, LocalDate releaseDate, Double voteAverage, Set<CastMember> cast) {
