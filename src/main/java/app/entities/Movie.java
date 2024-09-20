@@ -13,7 +13,8 @@ import java.util.Set;
 @Builder
 @NamedQueries({
         @NamedQuery(name = "Movie.getAll", query = "SELECT m FROM Movie m"),
-        @NamedQuery(name = "Movie.getByAverage", query = "SELECT m FROM Movie m ORDER BY m.voteAverage"),
+        @NamedQuery(name = "Movie.getByAverageDESC", query = "SELECT m FROM Movie m ORDER BY m.voteAverage DESC"),
+        @NamedQuery(name = "Movie.getByAverageASC", query = "SELECT m FROM Movie m ORDER BY m.voteAverage"),
         @NamedQuery(name = "Movie.getByPopularity", query = "SELECT m FROM Movie m ORDER BY m.voteAverage"),
         @NamedQuery(name = "Movie.getByTitle", query = "SELECT m FROM Movie m WHERE LOWER(m.originalTitle) LIKE LOWER(:originalTitle)"),
         @NamedQuery(name = "Movie.getByGenre", query = "SELECT m FROM Movie m JOIN m.genres g WHERE g.id = :genreId")
