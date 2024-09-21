@@ -1,9 +1,9 @@
 package app.services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,8 +56,32 @@ class MovieServiceTest {
 
     @Test
     void testGetMoviesByCountry() {
-        int expected = 1306; // For danish movies.
+        int expected = 1307; // For danish movies.
         int actual = movieService.getMoviesByCountry("DK").size();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void testGetMoviesByCountryWithCast() {
+        int expected = 1307; // For danish movies.
+        int actual = movieService.getMoviesByCountryWithCast("DK").size();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getMoviesByCountryParallelized() {
+        int expected = 1307; // For danish movies.
+        int actual = movieService.getMoviesByCountryParallelized("DK").size();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getMoviesByCountryParallelizedWithCast() {
+        int expected = 1307; // For danish movies.
+        int actual = movieService.getMoviesByCountryParallelizedWithCast("DK").size();
 
         Assertions.assertEquals(expected, actual);
     }
