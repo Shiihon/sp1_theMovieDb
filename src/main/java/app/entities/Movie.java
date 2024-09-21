@@ -23,15 +23,17 @@ import java.util.Set;
 @Table(name = "movie")
 public class Movie {
     @Id
+    @Column(unique = true, nullable = false)
     private Integer id;
-    @Column(name = "original_title")
+    @Column(name = "original_title", nullable = false)
     private String originalTitle;
     @Column(length = 1024)
     private String overview;
+    @Column(nullable = false)
     private Double popularity;
-    @Column(name = "release_date")
+    @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
-    @Column(name = "vote_average")
+    @Column(name = "vote_average", nullable = false)
     private Double voteAverage;
     @ManyToMany
     private Set<Genre> genres;
