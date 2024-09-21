@@ -1,15 +1,14 @@
 package app;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.persistence.EntityManagerFactory;
 import app.config.HibernateConfig;
 import app.daos.GenreDAO;
 import app.daos.MovieDAO;
-import app.dtos.CastMemberDTO;
 import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
 import app.services.MovieService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.Set;
 
@@ -56,15 +55,11 @@ public class Main {
         genreDTOs.forEach(genre -> genreDAO.create(genre));
     }
 
-    public static void saveAllMoviesInDB(String countryName) {
-        Set<MovieDTO> movies = movieService.getMoviesByCountry(countryName);
-
+    public static void saveAllMoviesInDB(String country) {
         MovieDAO movieDAO = new MovieDAO(emf);
-        for (MovieDTO movieDTO : movies) {
-            Set<CastMemberDTO> castMembers = movieService.getCastMembersByMovieId(movieDTO.getId());
-            movieDTO.setCast(castMembers);
-            movieDAO.create(movieDTO);
-        }
+        Set<MovieDTO> movies = movieService.getMoviesByCountryParallelizedWithCast(country);
+
+        movies.forEach(movie -> movieDAO.create(movie));
     }
 
     public static void displayAllMoviesInDB() {

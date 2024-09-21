@@ -71,6 +71,22 @@ class MovieServiceTest {
     }
 
     @Test
+    void getMoviesByCountryParallelized() {
+        int expected = 1307; // For danish movies.
+        int actual = movieService.getMoviesByCountryParallelized("DK").size();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void getMoviesByCountryParallelizedWithCast() {
+        int expected = 1307; // For danish movies.
+        int actual = movieService.getMoviesByCountryParallelizedWithCast("DK").size();
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
     void testGetMovieById() {
         MovieDTO expected = movieDTO;
         MovieDTO actual = movieService.getMovieById(expected.getId());
