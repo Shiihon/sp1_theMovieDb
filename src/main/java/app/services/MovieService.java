@@ -1,11 +1,11 @@
 package app.services;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import app.dtos.CastMemberDTO;
 import app.dtos.GenreDTO;
 import app.dtos.MovieDTO;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.URI;
@@ -69,8 +69,8 @@ public class MovieService {
         try {
             Set<MovieDTO> movies = new HashSet<>();
 
-            LocalDate endYear = LocalDate.of(2024, 1, 1);
-            LocalDate startYear = endYear.minusYears(5);
+            LocalDate endDate = LocalDate.of(2024, 1, 1);
+            LocalDate startDate = endDate.minusYears(5);
 
             int currentPage = 1;
             int totalPages = 0;
@@ -80,9 +80,9 @@ public class MovieService {
                         .append("/discover/movie?include_adult=true&include_video=false&language=en-US&page=")
                         .append(currentPage)
                         .append("&release_date.gte=")
-                        .append(startYear)
+                        .append(startDate)
                         .append(("&primary_release_date.lte="))
-                        .append(endYear)
+                        .append(endDate)
                         .append("&sort_by=popularity.desc&with_origin_country=")
                         .append(country);
 
@@ -109,11 +109,19 @@ public class MovieService {
             } while (currentPage <= totalPages);
 
             return movies;
-        } catch (IOException | InterruptedException | RuntimeException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+
+    public Set<MovieDTO> getMoviesByCountryWithCast(String country) {
+        Set<MovieDTO> movies = getMoviesByCountry(country);
+
+        movies.forEach(movie -> movie.setCast(getCastMembersByMovieId(movie.getId())));
+
+        return movies;
     }
 
     public MovieDTO getMovieById(Integer id) {
