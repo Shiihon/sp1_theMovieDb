@@ -14,6 +14,8 @@ import lombok.*;
 @Table(name = "genre")
 public class Genre {
     @Id
+    @Column(unique = true, nullable = false)
     private Integer id;
+    @Column(unique = true, nullable = false)
     private String name;
 }

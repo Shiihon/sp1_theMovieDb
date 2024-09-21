@@ -17,12 +17,16 @@ import java.util.Set;
 @Table(name = "cast_member")
 public class CastMember {
     @Id
+    @Column(unique = true, nullable = false)
     private Integer id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String role;
     private String job;
     @ManyToMany(mappedBy = "cast")
     @EqualsAndHashCode.Exclude
+    @Column(nullable = false)
     private Set<Movie> movies;
 
     public CastMember(Integer id, String name, String role, String job) {
