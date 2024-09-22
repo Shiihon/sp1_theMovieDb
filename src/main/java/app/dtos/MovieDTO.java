@@ -1,13 +1,13 @@
 package app.dtos;
 
+import app.entities.Genre;
+import app.entities.Movie;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import app.entities.Genre;
-import app.entities.Movie;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -65,11 +65,11 @@ public class MovieDTO {
         this.cast.add(castMemberDTO);
     }
 
-    public void addGenreId(Integer id) {
+    public void addGenreId(Integer genreId) {
         if (this.genreIds == null) {
             genreIds = new HashSet<>();
         }
 
-        this.genreIds.add(id);
+        this.genreIds.add(genreId);
     }
 }
