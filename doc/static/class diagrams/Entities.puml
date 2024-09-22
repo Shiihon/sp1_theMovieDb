@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class CastMember {
+    - Integer id
+    - String name
+    - String role
+    - String job
+    - Set<Movie> movies
+
+    + void addMovie(Movie movie)
+}
+
+class Genre {
+    - Integer id
+    - String name
+}
+
+class Movie {
+    - Integer id
+    - String originalTitle
+    - String overview
+    - Double popularity
+    - LocalDate releaseDate
+    - Double voteAverage
+    - Set<Genre> genres
+    - Set<CastMember> cast
+
+    + void addCastMember(CastMember castMember)
+}
+
+Movie *-- Genre
+Movie *-d- CastMember
+
+CastMember *-u- Movie
+
+@enduml
