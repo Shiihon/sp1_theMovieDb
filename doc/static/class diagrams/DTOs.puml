@@ -6,7 +6,6 @@ class CastMemberDTO {
     - String name
     - String role
     - String job
-    - String job
     - Set<Integer> movieIds
 
     + CastMember getAsEntity()
